@@ -1,0 +1,48 @@
+*, *::after, *::before{
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --primary: #151517;
+    --secondary: #FFFFFF;
+    --accent: #FF5C00;
+    --positive: #00FF00;
+    --negative: #FF0000;
+    --box-bg: #1D1D1D;
+}
+
+a{
+    text-decoration: none;
+}
+
+body{
+    background-color: var(--primary);
+    color: var(--secondary);
+}
+
+header{
+    background-color: var(--box-bg);
+    height: 80px;
+    padding: .5 2
+    rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1{
+    color: var(--accent);
+    font-size: 2.6rem;
+    margin-left: 2rem;
+}
+
+header nav a{
+    font-size: 1.4rem;
+    margin-right: 3rem;
+    color: var(--secondary);
+}
+
+header nav a:hover{
+    text-decoration: underline;
+}
