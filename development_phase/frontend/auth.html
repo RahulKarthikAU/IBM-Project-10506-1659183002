@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles//auth.css">
     <title>Personal Expense Tracker | Home</title>
 </head>
 <body>
@@ -16,7 +17,21 @@
     </header>
     <div class="auth-container">
         <div class="auth-header">
-            
+            <h3 class="btn active">Login</h3>
+            <h3 class="btn">SignUp</h3>
+        </div>
+        <div class="auth-form-cnt">
+            <form>
+                <div>
+                    <label for="login-username">Username</label>
+                    <input type="text" name="username" id="login-username">
+                </div>
+                <div>
+                    <label for="login-password">password</label>
+                    <input type="password" name="password" id="login-password">
+                </div>
+                <button>Login</button>
+            </form>
         </div>
     </div>
 </body>
