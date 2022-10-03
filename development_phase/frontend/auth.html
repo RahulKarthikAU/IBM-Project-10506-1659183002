@@ -17,8 +17,8 @@
     </header>
     <div class="auth-container">
         <div class="auth-header">
-            <h3 class="btn active">Login</h3>
-            <h3 class="btn">SignUp</h3>
+            <h3 class="btn active btn-login">Login</h3>
+            <h3 class="btn btn-signup">SignUp</h3>
         </div>
         <div class="auth-form-cnt">
             <form>
@@ -33,6 +33,24 @@
                 <button>Login</button>
             </form>
         </div>
+        <div class="auth-form-cnt none">
+            <form>
+                <div>
+                    <label for="login-username">Username</label>
+                    <input type="text" name="username" id="login-username">
+                </div>
+                <div>
+                    <label for="login-password">password</label>
+                    <input type="password" name="password" id="login-password">
+                </div>
+                <div>
+                    <label for="login-password">Re-Type Password</label>
+                    <input type="password" name="password" id="login-password">
+                </div>
+                <button>SignUp</button>
+            </form>
+        </div>
     </div>
+    <script src="./js/auth.js"></script>
 </body>
 </html>
