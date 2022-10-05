@@ -8,28 +8,32 @@ load_dotenv()
 
 
 def run_sql_select(query, params = None):
-    conn = ibm_db.connect(get_db_credential(), "", "")
-    statement = ibm_db.prepare(conn, query)
     try:
+        conn = ibm_db.connect(get_db_credential(), "", "")
+        statement = ibm_db.prepare(conn, query)
         if(params == None):
             ibm_db.execute(statement)
             data = ibm_db.fetch_assoc(statement)
             return data
         ibm_db.execute(statement, params)
         data = ibm_db.fetch_assoc(statement)
-        ibm_db.close(conn)
         return data
 
     except:
         return False
 
-def run_sql_insert(query, params):
-    conn = ibm_db.connect(get_db_credential(), "", "")
-    statement = ibm_db.prepare(conn, query)
-    try:
-        ibm_db.execute(statement, params)
+    finally: 
         ibm_db.close(conn)
+
+def run_sql_insert(query, params):
+    try:
+        conn = ibm_db.connect(get_db_credential(), "", "")
+        statement = ibm_db.prepare(conn, query)
+        ibm_db.execute(statement, params)
         return True
-        
+
     except:
         return False
+
+    finally: 
+        ibm_db.close(conn)
