@@ -1,4 +1,5 @@
 .auth-container{
+    position: relative;
     background-color: var(--box-bg);
     display: flex;
     flex-direction: column;
@@ -68,7 +69,7 @@
     border-color: var(--accent);
 }
 
-.auth-container .auth-form-cnt button{
+.auth-container .auth-form-cnt .btn{
     padding: .5rem 1.5rem;
     font-size: 2rem;
     cursor: pointer;
@@ -76,9 +77,43 @@
     color: var(--secondary);
     border: none;
     border-radius: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-container .auth-form-cnt .btn img{
+    width: 30px;
+    height: 30px;
+    margin: 0 0 0 1rem;
+    animation: loading_animation 1.5s ease infinite;
+}
+
+@keyframes loading_animation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .auth-container .auth-form-cnt button:hover{
     background-color: var(--secondary-transparent);
     color: var(--primary);
+}
+
+.auth-container .auth-form-cnt .auth-err{
+    color: var(--negative);
+    font-size: 1.2rem;
+    margin: .3rem 0;
+}
+
+.msg{
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 1rem;
+    color: var(--positive);
 }
