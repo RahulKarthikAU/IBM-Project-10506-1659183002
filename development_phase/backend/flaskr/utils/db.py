@@ -37,3 +37,16 @@ def run_sql_insert(query, params):
 
     finally: 
         ibm_db.close(conn)
+
+def run_sql_update(query, params):
+    try:
+        conn = ibm_db.connect(get_db_credential(), "", "")
+        statement = ibm_db.prepare(conn, query)
+        ibm_db.execute(statement, params)
+        return True
+
+    except:
+        return False
+
+    finally: 
+        ibm_db.close(conn)
