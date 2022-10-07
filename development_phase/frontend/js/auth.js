@@ -27,13 +27,15 @@ loginForm.addEventListener("submit", async (e) => {
         body: JSON.stringify(req_data)
     });
     const res_data = await res.json();
-
+    console.log(res)
     if(res.status !== 200){
-        showError(authErr[0], res_data.message);
+        showMessage(authErr[0], res_data.message);
     }
-
+    else{
+        showMessage(authErr[0], "success")
+    }
     toggleLoader(0, loginSubmit, authLoader[0]);
-    window.location.href = "index.html"
+    // window.location.href = "index.html"
 });
 
 signupForm.addEventListener("submit", async (e) => {
@@ -55,18 +57,18 @@ signupForm.addEventListener("submit", async (e) => {
     const res_data = await res.json();
 
     if(res.status !== 201){
-        showError(authErr[1], res_data.message);
+        showMessage(authErr[1], res_data.message);
     }
-
-    const msgElem = document.querySelector(".msg");
-    msgElem.innerText = "Successfully Registered Please verify the Email and Login"
-    setTimeout(() => msgElem.innerText = '', 4000)
-
-    loginBtn.click();
+    else{
+        const msgElem = document.querySelector(".msg");
+        showMessage(msgElem, "Successfully Registered Please verify the Email and Login");
+        setTimeout(showMessage.bind(null, msgElem, ''), 4000)
+        loginBtn.click();
+    }
     toggleLoader(0, signupSubmit, authLoader[1]);
 });
 
-const showError = (elem, msg) => {
+const showMessage = (elem, msg) => {
     elem.innerText = msg;
     setTimeout(() => elem.innerText = "", 2000);
 }
@@ -99,4 +101,4 @@ signUpBtn.addEventListener("click", (e) => {
     authBtn[0].classList.remove("active");
     formCnt[1].classList.remove("none");
     formCnt[0].classList.add("none");
-})
+});
