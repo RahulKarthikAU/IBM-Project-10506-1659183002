@@ -28,5 +28,8 @@ def validate_login(user_data):
     
     if(not (general.compare_hash(user_data["password"], get_user["PASSWORD_HASH"]))):
         return { "error": ({"message": "Username or Password Incorrect"}, 404) }
-    
+    print(get_user)
+    if(get_user["VERIFIED"] == False):
+        return {"error": ({"message": "Please verify the E-Mail to Login"}, 401)}
+
     return {"user" : get_user}
