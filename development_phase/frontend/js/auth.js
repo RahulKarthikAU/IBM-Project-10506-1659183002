@@ -1,6 +1,7 @@
 const endpoint = {
     "register": "http://localhost:5000/api/auth/register",
     "login": "http://localhost:5000/api/auth/login",
+    "resendMail": "http://localhost:5000/api/auth/verify"
 }
 
 const loginSubmit = document.querySelector(".login-submit");
@@ -10,8 +11,18 @@ const authErr = document.querySelectorAll(".auth-err");
 const loginForm = document.querySelector(".login-form");
 const signupForm = document.querySelector(".signup-form");
 
+const reSendTemplate = '<div class="re-send-msg">Please Verify the Email</div><button class="btn resend-btn">Resend</button><div class="msg"></div>'
+
+let isFormBtnEnalbed = true;
+let isResendBtnEnabled = true;
+let intervalUid = 0;
+
 loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    
+    if(!isFormBtnEnalbed)
+        return
+
     toggleLoader(1, loginSubmit, authLoader[0]);
 
     const req_data = {
@@ -28,18 +39,72 @@ loginForm.addEventListener("submit", async (e) => {
     });
     const res_data = await res.json();
     console.log(res)
-    if(res.status !== 200){
+    if(res.status === 401){
+        console.log('data', res_data)
+        const cnt = document.querySelector(".auth-container")
+        cnt.innerHTML = reSendTemplate;
+
+        document.querySelector(".resend-btn").addEventListener("click", resendMail.bind(null, req_data.email));
+        enable_next_resend(res_data["next_resend"]);
+        
+    }
+    else if(res.status !== 200){
         showMessage(authErr[0], res_data.message);
+        toggleLoader(0, loginSubmit, authLoader[0]);
     }
     else{
-        showMessage(authErr[0], "success")
+        window.location.href = "index.html"
     }
-    toggleLoader(0, loginSubmit, authLoader[0]);
-    // window.location.href = "index.html"
 });
+
+const enable_next_resend = (next_resend_ts) => {
+    const next_resend = (new Date(next_resend_ts)).getTime();
+    const now = (new Date()).getTime();
+    const diff = next_resend - now;
+    console.log(diff)
+    if(diff <= 0)
+    {
+        return;
+    }
+    
+    let seconds = Math.floor((diff/1000));
+    console.log(seconds)
+    const btn = document.querySelector(".resend-btn");
+    btn.disabled = true;
+    const msg = document.querySelector(".msg");
+    msg.innerText = `Wait: ${seconds--}`
+    isResendBtnEnabled = false;
+    intervalUid = setInterval(() => {
+        if(seconds === 0){
+            btn.disabled = false;
+            isResendBtnEnabled = true;
+            clearInterval(intervalUid);
+            msg.innerText = '';
+            return;
+        }
+        msg.innerText = `Wait: ${seconds--}`;
+    }, 1000);
+}
+
+const resendMail = async (email) => {
+    console.log(isResendBtnEnabled);
+    if(!isResendBtnEnabled)
+        return
+    isResendBtnEnabled = false;
+    const res = await fetch(endpoint.resendMail + `?email=${email}`, {
+        method: "GET"
+    });
+    const res_data = await res.json();
+    console.log(res, res_data);
+    enable_next_resend(res_data["next_resend"]);
+}
 
 signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    
+    if(!isFormBtnEnalbed)
+        return
+    
     toggleLoader(1, signupSubmit, authLoader[1]);
 
     const req_data = {
@@ -75,10 +140,12 @@ const showMessage = (elem, msg) => {
 
 const toggleLoader = (toEnable, submitBtn, loader) => {
     if(toEnable){
+        isFormBtnEnalbed = false;
         submitBtn.disabled = true;
         loader.classList.remove("none");
     }
     else{
+        isFormBtnEnalbed = true;
         submitBtn.disabled = false;
         loader.classList.add("none");
     }
@@ -101,4 +168,22 @@ signUpBtn.addEventListener("click", (e) => {
     authBtn[0].classList.remove("active");
     formCnt[1].classList.remove("none");
     formCnt[0].classList.add("none");
+});
+
+window.addEventListener("load", async () => {
+    toggleLoader(1, loginSubmit, authLoader[0]);
+    toggleLoader(1, signupSubmit, authLoader[1]);
+
+    const res = await fetch(endpoint.login, {
+        method: "GET",
+        credentials: "include"
+    });
+    const data = await res.json();
+    console.log(data, res);
+    if(res.status == 200){
+        window.location.href = "index.html"
+    }
+
+    toggleLoader(0, loginSubmit, authLoader[0]);
+    toggleLoader(0, signupSubmit, authLoader[1]);
 });

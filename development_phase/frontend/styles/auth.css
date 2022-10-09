@@ -9,6 +9,7 @@
     margin: 4rem auto;
     border-radius: 1rem;
     overflow: hidden;
+    padding: 0 0 .5rem 0;
 }
 
 .auth-container .auth-header{
@@ -69,7 +70,7 @@
     border-color: var(--accent);
 }
 
-.auth-container .auth-form-cnt .btn{
+.auth-container .btn{
     padding: .5rem 1.5rem;
     font-size: 2rem;
     cursor: pointer;
@@ -99,7 +100,7 @@
     }
 }
 
-.auth-container .auth-form-cnt button:hover{
+.auth-container .btn:hover{
     background-color: var(--secondary-transparent);
     color: var(--primary);
 }
@@ -108,6 +109,10 @@
     color: var(--negative);
     font-size: 1.2rem;
     margin: .3rem 0;
+}
+
+.re-send-msg{
+    margin: 1rem;
 }
 
 .msg{

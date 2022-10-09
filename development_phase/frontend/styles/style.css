@@ -48,10 +48,6 @@ header nav a:hover{
     text-decoration: underline;
 }
 
-.none{
-    display: none;
-}
-
 .confirm-msg{
     margin: 2rem auto;
     font-size: 2rem;
@@ -74,4 +70,8 @@ header nav a:hover{
 
 .confirm-msg a:hover{
     color: var(--secondary);
+}
+
+.none{
+    display: none !important;
 }
