@@ -9,10 +9,10 @@ def create_app(test_config=None):
     api = Api(app)
     CORS(app)
 
-    from .controllers.auth import Register, Login, VerifyEmail
+    from .controllers.auth import Register, Login, EmailVerification
     api.add_resource(Register, '/api/auth/register')
     api.add_resource(Login, '/api/auth/login')
-    api.add_resource(VerifyEmail, '/api/auth/verify')
+    api.add_resource(EmailVerification, '/api/auth/verify')
 
     @app.route('/hello')
     def hello():

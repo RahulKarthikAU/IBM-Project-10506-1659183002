@@ -5,6 +5,7 @@ from os import getenv
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Message
 from ..config.mail_config import get_mail
+from datetime import datetime, timedelta, timezone
 
 load_dotenv()
 
@@ -21,9 +22,38 @@ def compare_hash(user_password, hash):
     print(result)
     return result
 
+def generate_timestamp(value, is_day):
+    now = datetime.now()
+    if(is_day):
+        dt = now + timedelta(days=value)
+        return int(dt.timestamp())
+    dt = now + timedelta(minutes=value)
+    print('in')
+    print(now.strftime("%Y-%m-%d %H:%M:%S"))
+    print(dt.strftime("%Y-%m-%d %H:%M:%S"))
+    print(now.timestamp() * 1000)
+    print(dt.timestamp() * 1000)
+    print('ot')
+    return int(dt.timestamp() * 1000)
+
 def create_jwt_token(data):
+    data["exp"] = generate_timestamp(1, True)
+    print(data)
     token = jwt.encode(data, getenv('JWT_SECRET_KEY'), algorithm="HS256")
+    print(token)
     return token
+
+def validate_jwt_token(token):
+    try:
+        now = datetime.now(tz=timezone.utc)
+        print(int(now.timestamp()))
+        decoded_content = jwt.decode(token, getenv('JWT_SECRET_KEY'), algorithms=["HS256"])
+        print(decoded_content)
+    except jwt.ExpiredSignatureError:
+        return False
+    except jwt.InvalidSignatureError:
+        return False
+    return decoded_content
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(getenv('JWT_SECRET_KEY'))
@@ -46,7 +76,7 @@ def send_confirmation_token(email):
     token = generate_confirmation_token(email)    
     mail = get_mail()
 
-    confirm_url =f"http://localhost:5500/confirm.html?token={token}"
+    confirm_url =f"http://localhost:5500/ibm/IBM-Project-10506-1659183002/development_phase/frontend/confirm.html?token={token}"
     confirm_html = f"<p>Welcome! Thanks for signing up. Please follow this link to activate your account:</p><p><a href={confirm_url}>{confirm_url}</a></p><br><h4>Happy Spending</h4>"
 
     msg = Message(subject="Confirm E-Mail from Spency", sender=getenv("MAIL_USERNAME"), recipients=[email], html=confirm_html)

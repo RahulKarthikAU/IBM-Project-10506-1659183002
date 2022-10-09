@@ -30,6 +30,7 @@ def validate_login(user_data):
         return { "error": ({"message": "Username or Password Incorrect"}, 404) }
     print(get_user)
     if(get_user["VERIFIED"] == False):
-        return {"error": ({"message": "Please verify the E-Mail to Login"}, 401)}
+        print("in")
+        return {"error": ({"message": "Please verify the E-Mail to Login", "next_resend": get_user["NEXT_RESEND"]}, 401)}
 
     return {"user" : get_user}
