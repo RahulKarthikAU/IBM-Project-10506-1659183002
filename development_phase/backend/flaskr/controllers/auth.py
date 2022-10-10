@@ -43,7 +43,7 @@ class EmailVerification(Resource):
         if(not email):
             return {"message": "Invalid Token"}, 404
         
-        user = db.run_sql_select("SELECT EMAIL, VERIFIED FROM USER WHERE EMAIL = ?", (email,))
+        user = db.run_sql_select("SELECT ID, EMAIL, VERIFIED FROM USER WHERE EMAIL = ?", (email,))
         if(not user):
             return {"message": "No user exist with the mail ID"}, 404
         if(user["VERIFIED"]):
@@ -54,6 +54,7 @@ class EmailVerification(Resource):
         db.run_sql_update(sql_query, params=params)
 
         jwt_data = {
+            "id": user["ID"],
             "email": email
         }
         token = general.create_jwt_token(jwt_data)
@@ -67,9 +68,9 @@ class EmailVerification(Resource):
 
 class Login(Resource):
     @token_required
-    def get(self, payload):
+    def get(payload, self):
         print(payload)
-        return {"message": "User Logged In"}, 200
+        return {"message": "User Logged In", "email": payload['email']}, 200
 
     def post(self):   
         validate_result = validate.validate_login(user_data=request.json)
@@ -88,3 +89,11 @@ class Login(Resource):
             return response
         return {"message": "Successfully Logged In"}, 200
 
+class Logout(Resource):
+    @token_required
+    def get(payload, self):
+        @after_this_request
+        def set_cookie(response):
+            response.set_cookie('auth_token', value="", path="/", secure="None", samesite="None", httponly=True)
+            return response
+        return {"message": "Successfully Logged Out"}, 200

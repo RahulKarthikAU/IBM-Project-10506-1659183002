@@ -1,3 +1,4 @@
+from distutils.log import Log
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api, reqparse
@@ -9,10 +10,11 @@ def create_app(test_config=None):
     api = Api(app)
     CORS(app)
 
-    from .controllers.auth import Register, Login, EmailVerification
+    from .controllers.auth import Register, Login, Logout, EmailVerification
     api.add_resource(Register, '/api/auth/register')
     api.add_resource(Login, '/api/auth/login')
     api.add_resource(EmailVerification, '/api/auth/verify')
+    api.add_resource(Logout, '/api/auth/logout')
 
     @app.route('/hello')
     def hello():
