@@ -30,6 +30,7 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-size: 1.4rem;
 }
 
 header h1{
@@ -39,7 +40,6 @@ header h1{
 }
 
 header nav a{
-    font-size: 1.4rem;
     margin-right: 3rem;
     color: var(--secondary);
 }
