@@ -43,6 +43,7 @@ def create_jwt_token(data):
     print(token)
     return token
 
+
 def validate_jwt_token(token):
     try:
         now = datetime.now(tz=timezone.utc)
@@ -50,10 +51,33 @@ def validate_jwt_token(token):
         decoded_content = jwt.decode(token, getenv('JWT_SECRET_KEY'), algorithms=["HS256"])
         print(decoded_content)
     except jwt.ExpiredSignatureError:
-        return False
+        return {"is_valid": False, "message": "Token expired"}
     except jwt.InvalidSignatureError:
-        return False
-    return decoded_content
+        return {"is_valid": False, "message": "Invalid Token"}
+
+    return {"is_valid": True, "payload": decoded_content}
+
+from functools import wraps
+from flask import request, after_this_request
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth_token = request.cookies.get("auth_token")
+        print(auth_token)
+        if(not auth_token):
+            return ({"message": "No Token"}, 400)
+        res = validate_jwt_token(auth_token)
+        if(not res["is_valid"]):
+            @after_this_request
+            def set_cookie(response):
+                response.set_cookie('auth_token', value="", path="/", secure="None", samesite="None", httponly=True)
+                return response
+
+            return ({"message": res["message"]}, 404)
+
+        return f(res["payload"], *args, **kwargs)
+    return decorated
 
 def generate_confirmation_token(email):
     serializer = URLSafeTimedSerializer(getenv('JWT_SECRET_KEY'))

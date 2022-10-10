@@ -1,7 +1,9 @@
 from datetime import datetime
+from lib2to3.pgen2 import token
 from flask import request, after_this_request
 from flask_restful import Resource
 from ..utils import validate, general, db
+from ..utils.general import token_required
 
 class Register(Resource):
     def post(self):
@@ -64,18 +66,9 @@ class EmailVerification(Resource):
         return {"message": "User Verified"}, 200
 
 class Login(Resource):
-    def get(self):
-        token = request.cookies.get("auth_token")
-        print(token)
-        if(not token):
-            return {"message": "No Token"}, 400
-        is_token_valid = general.validate_jwt_token(token)
-        if(not is_token_valid):
-            @after_this_request
-            def set_cookie(response):
-                response.set_cookie('auth_token', value="", path="/", secure="None", samesite="None", httponly=True)
-                return response
-            return {"message": "Invalid Token"}, 400
+    @token_required
+    def get(self, payload):
+        print(payload)
         return {"message": "User Logged In"}, 200
 
     def post(self):   
