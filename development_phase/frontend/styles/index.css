@@ -19,3 +19,88 @@ header nav .user .user-logout{
     border-radius: 1rem;
     cursor: pointer;
 }
+
+main{
+    margin: 1rem;
+}
+
+.income-cnt{
+    width: 700px;
+    background-color: var(--box-bg);
+    font-size: 1.8rem;
+    padding: 1rem;
+}
+
+.income-cnt form{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.income-cnt input{
+    font-size: 1.6rem;
+    background-color: transparent;
+    color: var(--secondary);
+    border: 0;
+    border-bottom: 2px solid;
+    padding: .2rem;
+    outline: none;
+    height: 50px;
+}
+
+.income-cnt form .income{
+    display: flex;
+    flex-direction: column;
+}
+
+.income-cnt form .income .income-inp{
+    display: flex;
+    align-items: center;
+}
+
+.income-cnt form .income .income-inp .budget-logo{
+    height: 50px;
+    padding: .2rem;
+    border-bottom: 2px solid var(--secondary);
+}
+
+.income-cnt form .edit-logo{
+    cursor: pointer;
+    padding: .2rem;
+    align-self: flex-end;
+
+}
+
+.income-cnt .balance-cnt{
+    width: fit-content;
+    margin: 1rem auto .5rem auto;
+}
+
+.income-cnt .balance-cnt .balance{
+    color: var(--accent);
+    padding: 1rem;
+    background-color: var(--primary);
+    border-radius: .6rem;
+    border: 2px solid var(--secondary-transparent);
+}
+
+.income-cnt .balance-cnt .balance span.high{
+    color: var(--positive)
+}
+.income-cnt .balance-cnt .balance span.mid{
+    color: var(--accent)
+}
+.income-cnt .balance-cnt .balance span.low{
+    color: var(--negative)
+}
